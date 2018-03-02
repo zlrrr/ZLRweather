@@ -1,5 +1,6 @@
 package com.example.zlr.weatherapp;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.example.zlr.weatherapp.gson.Forecast;
 import com.example.zlr.weatherapp.gson.Suggestion;
 import com.example.zlr.weatherapp.gson.Weather;
+import com.example.zlr.weatherapp.service.AutoUpdateService;
 import com.example.zlr.weatherapp.util.HttpUtil;
 import com.example.zlr.weatherapp.util.Utility;
 
@@ -162,6 +164,8 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather",responseText);
                             editor.apply();
                             showWeatherInfo(weather);
+                            Intent intent = new Intent(WeatherActivity.this, AutoUpdateService.class);
+                            startService(intent);
                         }else{
                             Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_LONG).show();
                         }
