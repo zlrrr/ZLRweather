@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
@@ -71,8 +73,7 @@ public class ChooseAreaFragment extends Fragment{
 
     private int currentLevel;
 
-    @TargetApi(Build.VERSION_CODES.M)
-    @Nullable
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_area,container,false);
@@ -105,6 +106,12 @@ public class ChooseAreaFragment extends Fragment{
                         getActivity().finish();
                     } else if(getActivity() instanceof WeatherActivity){
                         WeatherActivity activity = (WeatherActivity) getActivity();
+
+                        SharedPreferences.Editor editor =
+                                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                        editor.putString("weatherId",weatherId);
+                        editor.apply();
+
                         activity.drawerLayout.closeDrawers();
                         activity.swipeRefresh.setRefreshing(true);
                         activity.requestWeather(weatherId);
